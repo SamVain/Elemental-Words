@@ -1,3 +1,19 @@
+"""
+The elementalForms function takes a string 'word' as input and returns an array containing all possible combinations
+of element symbols from the periodic table that can form the given word.
+
+It uses a recursive approach to generate all possible combinations of element symbols that can form the word. 
+The function iterates over the word, starting from each character, and checks if the substring (symbol) from 
+the current character to the end is a valid element symbol. If it is, it adds the corresponding element name 
+and symbol to the path and recursively explores further. When it reaches the end of the word, it appends the 
+current path (representing a valid combination of element symbols) to the forms list.
+
+The ELEMENTS dictionary contains mappings from element symbols to their corresponding full names. 
+Before comparing symbols, the function converts them to capitalize to ensure a case-insensitive comparison.
+
+Test cases are provided to validate the implementation.
+"""
+
 ELEMENTS = {
     'H': 'Hydrogen', 'He': 'Helium', 'Li': 'Lithium', 'Be': 'Beryllium', 'B': 'Boron',
     'C': 'Carbon', 'N': 'Nitrogen', 'O': 'Oxygen', 'F': 'Fluorine', 'Ne': 'Neon',
@@ -26,22 +42,11 @@ ELEMENTS = {
     'Og': 'Oganesson'
 }
 
-
-"""
-The elementalForms function takes a string 'word' as input and returns an array containing all possible combinations
-of element symbols from the periodic table that can form the given word.
-
-It uses a recursive approach to generate all possible combinations of element symbols that can form the word. 
-The function iterates over the word, starting from each character, and checks if the substring (symbol) from 
-the current character to the end is a valid element symbol. If it is, it adds the corresponding element name 
-and symbol to the path and recursively explores further. When it reaches the end of the word, it appends the 
-current path (representing a valid combination of element symbols) to the forms list.
-
-The ELEMENTS dictionary contains mappings from element symbols to their corresponding full names. 
-Before comparing symbols, the function converts them to capitalize to ensure a case-insensitive comparison.
-
-Test cases are provided to validate the implementation.
-"""
+# List of common compounds that can form words too
+COMPOUNDS = {
+    'no': 'Nitric oxide',
+    'co': 'Carbon monoxide',
+}
 
 def elementalForms(word):
     def find_forms(word, start, path, forms):
@@ -60,8 +65,24 @@ def elementalForms(word):
     find_forms(word.lower(), 0, [], forms)
     return forms
 
-# Test cases
-print(elementalForms('snack'))
-print(elementalForms('beach'))
-print(elementalForms('BEACH'))
 
+# Accept user input for multiple words on one line
+user_input = input("Enter one or more words separated by spaces: ")
+
+# Split the input string into individual words
+words = user_input.split()
+
+# Process each word separately
+for word in words:
+    # Check if the word is a compound
+    if word.lower() in COMPOUNDS:
+        print(f"Wow! The word '{word}' is the same as '{COMPOUNDS[word.lower()]}'!")
+    
+    # Check if the word can be converted into elemental forms
+    forms = elementalForms(word)
+    if forms:
+        print(f"Elemental forms for '{word}':")
+        for form in forms:
+            print(form)
+    else:
+        print(f"Error: '{word}' cannot be formed using elemental symbols.")
